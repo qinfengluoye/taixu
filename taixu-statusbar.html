@@ -32,10 +32,8 @@
 
     .tx-shell {
       position: relative;
-      max-height: min(1220px, 88vh);
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 30px 24px 28px;
+      overflow: visible;
+      padding: 14px 20px 16px;
       border: 1px solid rgba(248, 252, 255, 0.72);
       border-radius: 12px;
       background:
@@ -45,35 +43,59 @@
         inset 0 0 0 1px rgba(255, 255, 255, 0.22),
         inset 0 0 55px rgba(195, 226, 255, 0.12),
         0 12px 34px rgba(11, 36, 78, 0.25);
-      scrollbar-width: thin;
-      scrollbar-color: rgba(238,247,255,0.55) rgba(40,92,150,0.2);
+      transition: padding 0.22s ease, box-shadow 0.22s ease;
     }
 
-    .tx-shell::-webkit-scrollbar { width: 6px; }
-    .tx-shell::-webkit-scrollbar-track { background: rgba(40,92,150,0.18); }
-    .tx-shell::-webkit-scrollbar-thumb {
-      border-radius: 999px;
-      background: rgba(238,247,255,0.48);
+    #tx-expand:checked ~ .tx-shell {
+      padding: 30px 24px 28px;
+    }
+
+    .tx-body {
+      display: none;
+      padding-top: 1px;
+    }
+
+    #tx-expand:checked ~ .tx-shell .tx-body {
+      display: block;
     }
 
     .tx-head {
       position: relative;
       z-index: 2;
       text-align: center;
-      padding: 4px 0 12px;
+      padding: 0;
     }
 
     .tx-title {
-      margin: 0;
+      display: block;
+      margin: 0 auto;
+      padding: 8px 4px 10px;
       color: var(--tx-silver);
-      font-size: 42px;
+      font-size: clamp(30px, 8vw, 42px);
       font-weight: 900;
       letter-spacing: 0;
       line-height: 1.1;
+      cursor: pointer;
+      user-select: none;
       text-shadow:
         0 0 5px rgba(255, 255, 255, 0.92),
         0 0 16px rgba(207, 235, 255, 0.82),
         0 4px 14px rgba(24, 54, 112, 0.46);
+    }
+
+    .tx-title::after {
+      content: "◇";
+      display: block;
+      margin-top: 4px;
+      color: rgba(245,251,255,0.72);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1;
+      text-shadow: none;
+    }
+
+    #tx-expand:checked ~ .tx-shell .tx-title::after {
+      content: "◆";
     }
 
     .tx-nav {
@@ -1207,11 +1229,14 @@
 
     @media (max-width: 430px) {
       .tx-shell {
-        max-height: 88vh;
+        padding: 9px 14px 11px;
+      }
+
+      #tx-expand:checked ~ .tx-shell {
         padding: 24px 15px 22px;
       }
 
-      .tx-title { font-size: 34px; }
+      .tx-title { font-size: 32px; padding: 6px 4px 8px; }
       .tx-nav label { font-size: 13px; height: 31px; }
       .tx-grid,
       .tx-duo,
@@ -1259,6 +1284,7 @@
     }
   </style>
 
+  <input id="tx-expand" type="checkbox">
   <input id="tx-page-1" name="tx-page" type="radio" checked>
   <input id="tx-page-2" name="tx-page" type="radio">
   <input id="tx-page-3" name="tx-page" type="radio">
@@ -1268,18 +1294,19 @@
 
   <div class="tx-shell">
     <header class="tx-head">
-      <h1 class="tx-title">太虚修真录</h1>
+      <label class="tx-title" for="tx-expand">太虚修真录</label>
     </header>
 
-    <nav class="tx-nav" aria-label="太虚修真录分页">
-      <label for="tx-page-1">属性</label>
-      <label for="tx-page-2">境界</label>
-      <label for="tx-page-3">功法</label>
-      <label for="tx-page-5">储物</label>
-      <label for="tx-page-6">宗门</label>
-    </nav>
+    <div class="tx-body">
+      <nav class="tx-nav" aria-label="太虚修真录分页">
+        <label for="tx-page-1">属性</label>
+        <label for="tx-page-2">境界</label>
+        <label for="tx-page-3">功法</label>
+        <label for="tx-page-5">储物</label>
+        <label for="tx-page-6">宗门</label>
+      </nav>
 
-    <main class="tx-pages">
+      <main class="tx-pages">
       <section class="tx-page" data-page="1">
         <h2 class="tx-page-title">属性</h2>
         <div class="tx-grid tx-attribute-grid">
@@ -1709,7 +1736,8 @@
           <label class="tx-arrow" for="tx-page-1" title="下一页">›</label>
         </footer>
       </section>
-    </main>
+      </main>
+    </div>
   </div>
 </div>
 </body>
